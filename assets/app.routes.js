@@ -43,6 +43,11 @@
 			templateUrl: '/templates/itemsForm.html'
 		});
 
+		$routeProvider.when('/items/list', {
+			controller: 'ItemsListController',
+			templateUrl: '/templates/itemsList.html'
+		});
+
 
 		///
 		// Other

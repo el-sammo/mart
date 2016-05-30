@@ -1576,12 +1576,12 @@ td {
 	text-overflow: ellipses;
 }
 
-#tt-main-container {
+#mm-main-container {
 	margin-left: 0px;
 	width: 100%;
 }
 
-#tt-menu {
+#mm-menu {
 	top: 0px;
 	left: 0px;
 	width: 100%;
@@ -1596,11 +1596,11 @@ td {
 	position: relative;
 }
 
-#tt-main {
+#mm-main {
 	top: 0px;
 	left: 0px;
 	width: 100%;
-	height: 430px;
+	height: 600px;
 	background: rgba(54, 25, 25, .5);
 	position: relative;
 }
@@ -1635,10 +1635,8 @@ td {
 	position: relative;
 }
 
-.hr_wide {
-	background-image: url("images/horse_racing_wide.jpg");
-	background-size: 100%;
-	background-repeat: no-repeat;
+.mm_wide {
+	background-color: #FFFFFF;
 }
 
 .baseball_wide {

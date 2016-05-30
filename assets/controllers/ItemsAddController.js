@@ -10,14 +10,14 @@
 	
 	controller.$inject = [
 		'$scope', '$http', '$routeParams', '$rootScope', '$window', 
-		'customerMgmt', 'deviceMgr', 'catMgmt', 'itemMgmt',
-		'signupPrompter'
+		'messenger', 'customerMgmt', 'deviceMgr', 'signupPrompter',
+		'catMgmt', 'itemMgmt', 'itemSchema'
 	];
 
 	function controller(
 		$scope, $http, $routeParams, $rootScope, $window,
-		customerMgmt, deviceMgr, catMgmt, itemMgmt,
-		signupPrompter
+		messenger, customerMgmt, deviceMgr, signupPrompter,
+		catMgmt, itemMgmt, itemSchema
 	) {
 
 		if(deviceMgr.isBigScreen()) {
@@ -35,12 +35,31 @@
 
 				var getCatsPromise = catMgmt.getCats();
 				getCatsPromise.then(function(catData) {
-					$scope.catData = catData;
+					$scope.data = {
+						repeatSelect: null,
+						availableOptions: catData
+					}
 				});
 
 			}
 
 		});
+
+		$scope.itemSchema = itemSchema;
+		$scope.item = itemSchema.populateDefaults({});
+		$scope.item.testData = true;
+
+		$scope.save = function() {
+			var createItemPromise = itemMgmt.createItem($scope.item);
+			createItemPromise.then(function(res) {
+				if(res && res.statusText && res.statusText === 'OK') {
+					messenger.show('Item created', '');
+					$window.location.href = 'app/items/list';
+				} else {
+					messenger.show('Item FAILED', '');
+				}
+			});
+		}
 
 	}
 

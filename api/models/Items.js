@@ -26,12 +26,8 @@ module.exports = {
       type: 'string',
       required: true
 		},
-    dollars: {
-      type: 'integer',
-      required: true
-		},
-    cents: {
-      type: 'integer',
+    price: {
+      type: 'string',
       required: true
 		},
     barcode: {
