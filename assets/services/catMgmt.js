@@ -18,6 +18,7 @@
 	) {
 		var cat;
 		var getCatPromise;
+		var getCatsPromise;
 
 		var service = {
 			getCat: function(catId) {
@@ -36,6 +37,23 @@
 				});
 
 				return getCatPromise;
+			},
+
+			getCats: function() {
+				if(getCatsPromise) {
+					return getCatsPromise;
+				}
+
+				var url = '/cats/';
+				getCatsPromise = $http.get(url).then(function(res) {
+					return res.data;
+				}).catch(function(err) {
+					console.log('GET ' + url + ': ajax failed');
+					console.error(err);
+					return $q.reject(err);
+				});
+
+				return getCatsPromise;
 			},
 
 			createCat: function(catData) {
