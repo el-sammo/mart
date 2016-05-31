@@ -47,14 +47,12 @@
 
 		$scope.itemSchema = itemSchema;
 		$scope.item = itemSchema.populateDefaults({});
-		$scope.item.testData = true;
 
 		$scope.save = function() {
 			var createItemPromise = itemMgmt.createItem($scope.item);
 			createItemPromise.then(function(res) {
 				if(res && res.statusText && res.statusText === 'OK') {
-					messenger.show('Item created', '');
-					$window.location.href = 'app/items/list';
+					messenger.show($scope.item.name +' added', '');
 				} else {
 					messenger.show('Item FAILED', '');
 				}

@@ -40,7 +40,7 @@
 				return getItemPromise;
 			},
 
-			getItemsByBarcode: function(barcode) {
+			getItemByBarcode: function(barcode) {
 				var url = '/items/byBarcode/' + barcode;
 				getItemsByBarcodePromise = $http.get(url).then(function(res) {
 					mergeIntoItem(res.data);
@@ -54,8 +54,8 @@
 				return getItemsByBarcodePromise;
 			},
 
-			getItemsByCategory: function(barcode) {
-				var url = '/items/byCategory/' + barcode;
+			getItemsByCategory: function(category) {
+				var url = '/items/byCategory/' + category;
 				getItemsByCategoryPromise = $http.get(url).then(function(res) {
 					mergeIntoItem(res.data);
 					return item;

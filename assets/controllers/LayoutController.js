@@ -13,15 +13,15 @@
 	controller.$inject = [
 		'navMgr', 'pod', '$scope', '$window',
 		'$http', '$routeParams', '$modal', 'layoutMgmt',
-		'$rootScope', 'customerMgmt', 'trdMgmt',
-		'signupPrompter', 'deviceMgr'
+		'$rootScope', 'customerMgmt', 'deviceMgr',
+		'signupPrompter', 'catMgmt', 'itemMgmt', 'orderMgmt'
 	];
 
 	function controller(
 		navMgr, pod, $scope, $window,
 		$http, $routeParams, $modal, layoutMgmt,
-		$rootScope, customerMgmt, trdMgmt,
-		signupPrompter, deviceMgr
+		$rootScope, customerMgmt, deviceMgr,
+		signupPrompter, catMgmt, itemMgmt, orderMgmt
 	) {
 
 		if(deviceMgr.isBigScreen()) {
@@ -43,50 +43,9 @@
 		$scope.showLogout = false;
 		$scope.accessAccount = false;
 
-		$scope.about = function() {
-			$window.location.href = location.origin + "/app/about";
-		}
-
-		$scope.contact = function() {
-			$window.location.href = location.origin + "/app/contact";
-		}
-
-		$scope.disclosure = function() {
-			signupPrompter.disclosure();
-		}
-
-		$scope.faq = function() {
-			$window.location.href = location.origin + "/app/faq";
-		}
-
 		$scope.home = function() {
 			$window.location.href = location.origin + "/app/";
 		}
-
-		$scope.story = function() {
-			$window.location.href = location.origin + "/app/story";
-		}
-
-		$scope.tos = function() {
-			$window.location.href = location.origin + "/app/tos";
-		}
-
-		$scope.welcome = function() {
-			signupPrompter.welcome();
-		}
-
-		var bgImgs = [
-			'baseball_wide',
-			'basketball_wide',
-			'football_wide',
-			'hockey_wide',
-			'racing_wide',
-			'soccer_wide'
-		];
-
-		var randImg = bgImgs[Math.floor(Math.random() * bgImgs.length)];
-
-		$scope.bgImg = randImg;
 
 		var sessionPromise = customerMgmt.getSession();
 		sessionPromise.then(function(sessionData) {
@@ -103,19 +62,7 @@
 			$scope.logIn = layoutMgmt.logIn;
 			$scope.logOut = layoutMgmt.logOut;
 			$scope.signUp = layoutMgmt.signUp;
-			$scope.feedback = layoutMgmt.feedback;
 
-			var getTrdsByDatePromise = trdMgmt.getTrdsByDate();
-			getTrdsByDatePromise.then(function(trdsData) {
-				var tracks = [];
-				trdsData.forEach(function(trd) {
-					tracks.push({
-						id: trd.id,
-						name: trd.name
-					});
-				});
-				$scope.tracks = tracks;
-			});
 		});
 
 		function capitalizeFirstLetter(string) {
@@ -129,8 +76,32 @@
 			$rootScope.$broadcast('orderChanged');
 		});
 
-		$scope.showTrack = function(trackId) {
-			$scope.trackShow = trackId;
+		$scope.showCategories = function() {
+			var getCatsPromise = catMgmt.getCats();
+			getCatsPromise.then(function(catsData) {
+				$scope.catsData = catsData;
+				$scope.tmplShow = 'categories';
+			});
+		}
+
+		$scope.showItems = function(category) {
+			var getItemsByCategoryPromise = itemMgmt.getItemsByCategory(category);
+			getItemsByCategoryPromise.then(function(itemsData) {
+				$scope.itemsData = itemsData;
+				$scope.tmplShow = 'items';
+			});
+		}
+
+		$scope.showItem = function(itemId) {
+			var getItemPromise = itemMgmt.getItem(itemId);
+			getItemPromise.then(function(itemData) {
+				$scope.itemData = itemData;
+				$scope.tmplShow = 'item';
+			});
+		}
+
+		$scope.showPOS = function() {
+			$scope.tmplShow = 'pos';
 		}
 
 	}

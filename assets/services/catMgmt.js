@@ -44,7 +44,7 @@
 					return getCatsPromise;
 				}
 
-				var url = '/cats/';
+				var url = '/cats/alphabetized';
 				getCatsPromise = $http.get(url).then(function(res) {
 					return res.data;
 				}).catch(function(err) {

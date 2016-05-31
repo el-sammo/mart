@@ -4,223 +4,112 @@
 			class="contentGreyBg"
 			style="top: 8px;"
 		>
-			<div 
-				class="row" 
-				ng-repeat="track in trdData"
-				ng-show="trackShow === track.id"
-			>
-				<div 
-					class="col-md-10 col-md-offset-1"
-				>
-					<div class="row">
-						<div 
-							class="col-md-12" 
-							style="text-align: center;"
-						>
-							<span class="trackHead">
-								{{track.name}}
-							</span>
-						</div>
-					</div>
-					<div 
-						class="row" 
-						style="text-align: left; padding-top: 6px;"
-					>
-						<div 
-							class="col-md-1" 
-							ng-repeat="race in track.races"
-						>
+			<div class="row" ng-show="tmplShow === 'categories'">
+				<div class="col-md-12">
+					<div class="row" ng-repeat="category in catsData">
+						<div class="col-md-12">
 							<span 
-								class="raceHead" 
-								ng-click="showTrackRace(track.id, race.number)"
+								class="basicDetails" 
+								style="cursor: pointer;" 
+								ng-click="showItems(category.name)"
 							>
-								Race {{race.number}}
+								{{category.name}}
 							</span>
-						</div>
-					</div>
-					<div 
-						class="row" 
-						style="padding-top: 6px;"
-						ng-repeat="race in track.races" 
-						ng-init="trackRaceId = track.id+'-'+race.number"
-						ng-show="trId === trackRaceId"
-					>
-						<div 
-							class="col-md-12" 
-							style="text-align: left;"
-						>
-							<div 
-								class="row"
-								style="padding-top: 6px;"
-							>
-								<div class="col-md-12">
-									<span 
-										class="raceDetails"
-										ng-show="race.time"
-									>
-										Post: {{convertPostTime(race.time)}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.distance"
-									>
-										| Distance: {{convertDist(race.distance)}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.surface"
-									>
-										| Surface: {{race.surface}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.sexes"
-									>
-										| {{race.sexes}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.ages"
-									>
-										| {{race.ages}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.type"
-									>
-										| {{race.type}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.claim"
-									>
-										| Claim: ${{race.claim}}
-									</span>
-									<span 
-										class="raceDetails"
-										ng-show="race.purse"
-									>
-										| Purse: ${{race.purse}}
-									</span>
-								</div>
-							</div>
-							<div 
-								class="row"
-								style="padding-top: 6px;"
-							>
-								<div class="col-md-12">
-									<span 
-										class="raceDetails"
-									>
-										Wager Type:
-									</span>
-									<span 
-										class="raceDetails"
-										style="padding-left: 8px; cursor: pointer;"
-										ng-repeat="wager in race.wagers"
-										ng-click="showRaceWager(track.id, race.number, wager.wager)"
-									>
-										{{wager.wager}}
-									</span>
-								</div>
-							</div>
-							<div 
-								class="row"
-								style="padding-top: 6px;"
-							>
-								<div 
-									class="col-md-12"
-								>
-									<div class="row" ng-show="legs > 1">
-										<div class="col-md-12">
-											<div class="row">
-												<div 
-													class="col-md-1"
-													ng-repeat="runners in wagerRunners"
-													ng-init="legNumber = $index + 1"
-													track by $index
-												>
-													<span 
-														class="raceDetails"
-														ng-click="showLeg(legNumber)"
-													>
-														Leg {{legNumber}}
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row" ng-show="legs < 2 && parts > 1">
-										<div class="col-md-12">
-											<span class="raceDetails">Multi-part</span>
-										</div>
-									</div>
-									<div class="row" ng-show="legs < 2 && parts < 2">
-										<div class="col-md-12">
-											<div class="row">
-												<div class="col-md-1">
-													<span class="raceDetails">{{singleDesc}}</span>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">Runner</span>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">Jockey</span>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">Trainer</span>
-												</div>
-											</div>
-											<div 
-												class="row"
-												ng-repeat="entry in wagerRunners[0]"
-											>
-												<div class="col-md-1">
-													<input 
-														type="checkbox"
-														ng-model="raceWagerId"
-														id="race.id+'-Win-'+entry.number"
-													>
-													<label 
-														for="{{race.id}}-Win-{{entry.number}}"
-														class="raceDetails"
-														style="top: -2px; position: relative;"
-														ng-show="entry.post && (entry.post !== entry.number)"
-													>
-														{{entry.number}} ({{entry.post}})
-													</label>
-													<label 
-														for="{{race.id}}-Win-{{entry.number}}"
-														class="raceDetails"
-														style="top: -2px; position: relative;"
-														ng-show="!entry.post || (entry.post === entry.number)"
-													>
-														{{entry.number}}
-													</label>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">
-														{{entry.name}}
-													</span>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">
-														{{entry.jockey}}
-													</span>
-												</div>
-												<div class="col-md-2">
-													<span class="raceDetails">
-														{{entry.trainer}}
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row" ng-show="tmplShow === 'items'">
+				<div class="col-md-12">
+					<div class="row">
+						<div 
+							class="col-md-2"
+							style="text-align: left!important;"
+						>
+							<span class="basicHeading">
+								Item
+							</span>
+						</div>
+						<div 
+							class="col-md-1"
+							style="text-align: left!important;"
+						>
+							<span class="basicHeading">
+								Size
+							</span>
+						</div>
+						<div 
+							class="col-md-3"
+							style="text-align: left!important;"
+						>
+							<span class="basicHeading">
+								Description
+							</span>
+						</div>
+						<div 
+							class="col-md-2"
+							style="text-align: right!important;"
+						>
+							<span class="basicHeading">
+								Price
+							</span>
+						</div>
+					</div>
+					<div class="row" ng-repeat="item in itemsData">
+						<div 
+							class="col-md-2"
+							style="text-align: left!important;"
+						>
+							<span 
+								class="basicDetails" 
+								style="cursor: pointer;" 
+								ng-click="showItem(item.id)"
+							>
+								{{item.name}}
+							</span>
+						</div>
+						<div 
+							class="col-md-1"
+							style="text-align: left!important;"
+						>
+							<span 
+								class="basicDetails" 
+								style="cursor: pointer;" 
+								ng-click="showItem(item.id)"
+							>
+								{{item.size}}
+							</span>
+						</div>
+						<div 
+							class="col-md-3"
+							style="text-align: left!important;"
+						>
+							<span 
+								class="basicDetails" 
+								style="cursor: pointer;" 
+								ng-click="showItem(item.id)"
+							>
+								{{item.description}}
+							</span>
+						</div>
+						<div 
+							class="col-md-2"
+							style="text-align: right!important;"
+						>
+							<span 
+								class="basicDetails" 
+								style="cursor: pointer;" 
+								ng-click="showItem(item.id)"
+							>
+								${{item.price}}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-show="tmplShow === 'item'">
+			</div>
+			<div class="row" ng-show="tmplShow === 'pos'">
 			</div>
 		</div>
 	</div>
