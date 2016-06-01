@@ -13,20 +13,8 @@ module.exports = {
   ///
 
   attributes: {
-    orderStatus: {
-      type: 'integer',
-      required: true
-    },
-		customerId: {
+		sid: {
       type: 'string',
-      required: false
-		},
-		sessionId: {
-      type: 'string',
-      required: false
-		},
-		discount: {
-      type: 'float',
       required: false
 		}
   },

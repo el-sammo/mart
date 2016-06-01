@@ -10,11 +10,11 @@
 	app.factory('customerMgmt', service);
 	
 	service.$inject = [
-		'$http', '$q', '$sce', 'configMgr', 'querystring'
+		'$http', '$q', 'configMgr'
 	];
 	
 	function service(
-		$http, $q, $sce, configMgr, querystring
+		$http, $q, configMgr
 	) {
 		var customer;
 		var getCustomerPromise;

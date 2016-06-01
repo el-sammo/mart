@@ -21,22 +21,8 @@
 		messenger, deviceMgr, customerMgmt
 	) {
 
-		var p = $http.get('/areas/');
-
 		$scope.badCreds = false;
 							
-		// if areas ajax fails...
-		p.error(function(err) {
-			console.log('layoutMgmt: areas ajax failed');
-			console.error(err);
-		});
-									
-		// if areas ajax succeeds...
-		p.then(function(res) {
-			$scope.areas = res.data;
-		});
-
-		$scope.areaName = $rootScope.areaName;
 		$scope.accessAccount = $rootScope.accessAccount;
 
 		$scope.credentials = {};
@@ -55,6 +41,7 @@
 			$http.post(
 				'/login', credentials
 			).success(function(data, status, headers, config) {
+				location.reload();
 				// if login ajax succeeds...
 				if(status >= 400) {
 					$rootScope.$broadcast('customerLoggedIn', data.customerId);
