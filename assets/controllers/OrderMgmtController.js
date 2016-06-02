@@ -6,17 +6,17 @@
 	app.controller('OrderMgmtController', controller);
 	
 	controller.$inject = [
-		'$q', '$scope', '$modalInstance', '$http', '$rootScope', '$timeout',
-		'$window', 'customerMgmt', 'clientConfig', 'args', 'entityMgmt',
-		'reservationMgmt', 'signupPrompter', 'layoutMgmt',
-		'payMethodMgmt', 'orderMgmt', 'promoMgmt'
+		'$q', '$scope', '$modalInstance', '$http', '$rootScope', 
+		'$timeout', '$window', 'customerMgmt', 'clientConfig', 
+		'args', 'signupPrompter', 'layoutMgmt', 'orderMgmt', 
+		'promoMgmt'
 	];
 
 	function controller(
-		$q, $scope, $modalInstance, $http, $rootScope, $timeout,
-		$window, customerMgmt, clientConfig, args, entityMgmt,
-		reservationMgmt, signupPrompter, layoutMgmt,
-		payMethodMgmt, orderMgmt, promoMgmt
+		$q, $scope, $modalInstance, $http, $rootScope, 
+		$timeout, $window, customerMgmt, clientConfig, 
+		args, signupPrompter, layoutMgmt, orderMgmt, 
+		promoMgmt
 	) {
 
 		$scope.showProcessing = false;

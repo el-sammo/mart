@@ -5,15 +5,18 @@
 							<span class="basicHeading">Bar Code</span>
 						</div>
 					</div>
+					<br/>
 					<div class="row">
 						<div class="col-md-12">
 							<input 
 								type="text"
 								name="bcId"
 								ng-model="bcId"
+								auto-focus
 							>
 						</div>
 					</div>
+					<br/>
 					<div class="row">
 						<div class="col-md-12">
 							<button
@@ -36,7 +39,7 @@
 							<span ng-show="thing.quantity > 1">{{(thing.quantity * thing.price).toFixed(2)}}</span>
 							<br>
 							<div class="priceOptionRemove">
-								<span class="removeFromOrder" ng-init="thingId = thing.optionId" ng-click="removeItem(thing)">
+								<span class="removeFromOrder" ng-init="thingId = thing.itemId" ng-click="removeItem(order, thing)">
 									Remove
 								</span>
 							</div>

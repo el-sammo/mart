@@ -23,7 +23,20 @@
 		
 		$scope.clientConfig = clientConfig;
 
-		$scope.removeItem = orderMgmt.remove;
+		$scope.removeItem = function(order, item) {
+			var idx = 0;
+			order.things.forEach(function(thing) {
+				if(thing.itemId === item.itemId) {
+					order.things.splice(idx, 1);
+					var updateOrderPromise = orderMgmt.updateOrder(order);
+					updateOrderPromise.then(function(res) {
+						$scope.updateOrder();
+					});
+				} else {
+					idx++;
+				}
+			});
+		}
 
 		$rootScope.$on('orderChanged', function(evt, args) {
 			$scope.updateOrder();
@@ -91,8 +104,6 @@
 							
 			var updateOrderPromise = orderMgmt.updateOrder(order);
 			updateOrderPromise.then(function(res) {
-console.log('res.data:');
-console.log(res.data);
 			});
 		};
 
@@ -105,8 +116,85 @@ console.log(res.data);
 					var getOrderBySIDPromise = orderMgmt.getOrderBySID(sid);
 					getOrderBySIDPromise.then(function(orderData) {
 						if(orderData && orderData.id) {
-console.log('orderData:');
-console.log(orderData);
+		
+							function mergeThings(existingThing, thingToMerge) {
+								existingThing.quantity = (
+									parseInt(existingThing.quantity) + parseInt(thingToMerge.quantity)
+								);
+			
+								var specInst = [];
+								existingThing.specInst && specInst.push(existingThing.specInst);
+								thingToMerge.specInst && specInst.push(thingToMerge.specInst);
+								existingThing.specInst = specInst.join('; ');
+							}
+			
+							function buildThings(existingThings) {
+								existingThings || (existingThings = []);
+			
+								var deferred = $q.defer();
+			
+								newThing(itemData[0]).then(function(thingToAdd) {
+									var isDuplicate = false;
+									existingThings.forEach(function(existingThing) {
+										if(existingThing.itemId !== thingToAdd.itemId) {
+											return;
+										}
+										isDuplicate = true;
+										mergeThings(existingThing, thingToAdd);
+									});
+			
+									if(! isDuplicate) {
+										existingThings.push(thingToAdd);
+									}
+			
+									deferred.resolve(existingThings);
+								}).catch(deferred.reject);
+			
+								return deferred.promise;
+							}
+			
+							function newThing(item) {
+								var deferred = $q.defer();
+			
+								var thing = {
+									name: item.name,
+									itemId: item.id,
+									price: item.price,
+									quantity: 1, 
+									barcode: item.barcode
+								};
+
+								deferred.resolve(thing);
+			
+								return deferred.promise;
+							}
+			
+							function buildOrder(order) {
+								var deferred = $q.defer();
+			
+								buildThings(order.things).then(function(things) {
+									order.things = things;
+									deferred.resolve(order);
+								}).catch(deferred.reject);
+			
+								return deferred.promise;
+							}
+			
+							// Controls that prevent an item from being added to
+							// an order that has already been paid for
+							if(orderData.paid) {
+								console.log('attempting to add item to completed order...');
+								$scope.orderCompleted = true;
+								return;
+							}
+			
+							buildOrder(orderData).then(function(order) {
+								var updateOrderPromise = orderMgmt.updateOrder(order);
+								updateOrderPromise.then(function(res) {
+									$rootScope.$broadcast('orderChanged');
+								});
+							});
+
 						} else {
 							var starterOrder = {};
 							starterOrder.sid = sid;
@@ -123,8 +211,7 @@ console.log(orderData);
 	
 							var createOrderPromise = orderMgmt.createOrder(starterOrder);
 							createOrderPromise.then(function(starterOrderData) {
-console.log('starterOrderData:');
-console.log(starterOrderData);
+								$rootScope.$broadcast('orderChanged');
 							});
 						}
 					});
